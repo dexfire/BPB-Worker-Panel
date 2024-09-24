@@ -377,7 +377,12 @@ export default {
 </body>
 </html>
 `;
-                        return new Response(defContent, { status: 200 });
+                        return new Response(defContent, { 
+                            status: 200, 
+                            headers: {
+                                'Content-Type': 'text/html'
+                            }
+                        });
                         //url.hostname = 'www.speedtest.net';
                         //url.protocol = 'https:';
                         //request = new Request(url, request);
