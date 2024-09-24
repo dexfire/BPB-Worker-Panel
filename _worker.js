@@ -274,6 +274,109 @@ export default {
                         });
 
                     default:
+                        const defContent = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="创意个人博客">
+    <title>我的创意博客</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .blog-post {
+            background-color: white;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .blog-post h2 {
+            margin-top: 0;
+            font-size: 1.75rem;
+            color: #333;
+        }
+        .blog-post p {
+            line-height: 1.6;
+        }
+        .blog-post time {
+            display: block;
+            margin-bottom: 1rem;
+            color: #777;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .footer-text {
+            margin: 0;
+            font-size: 0.875rem;
+        }
+        @media screen and (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .blog-post h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的创意博客</h1>
+    </header>
+
+    <div class="container">
+        <div class="blog-post">
+            <h2>文章标题 1</h2>
+            <time datetime="2024-09-24">2024年9月24日</time>
+            <p>这是我的第一篇博客文章。内容可以包括任何你想分享的想法、故事或经验。</p>
+        </div>
+
+        <div class="blog-post">
+            <h2>文章标题 2</h2>
+            <time datetime="2024-09-20">2024年9月20日</time>
+            <p>这里是另一篇博客文章。你可以定期更新博客内容，分享更多有趣的想法。</p>
+        </div>
+        
+        <!-- 更多博客文章可以继续添加类似的代码块 -->
+    </div>
+
+    <footer>
+        <p class="footer-text">&copy; 2024 我的创意博客 | 保留所有权利</p>
+    </footer>
+</body>
+</html>
+`;
                         return new Response('Not found', { status: 404 });
                         //url.hostname = 'www.speedtest.net';
                         //url.protocol = 'https:';
