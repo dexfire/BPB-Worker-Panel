@@ -4173,6 +4173,11 @@ function buildSingboxRoutingRules (blockAds, bypassIran, bypassChina, blockPorn,
         outbound: "direct"
     });
 
+    bypassLAN && rules.push({
+        ip_cidr: ["192.168.0.0/16", "172.0.0.0/18"],
+        source_ip_cidr: ["192.168.0.0/16","172.0.0.0/18"],
+        outbound: "direct"
+    });
 
     let blockRuleSet = {
         rule_set: [
