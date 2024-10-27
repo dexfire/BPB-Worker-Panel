@@ -56,11 +56,45 @@ export async function handlePanel(request, env) {
 }
 
 export async function fallback(request) {
-    const url = new URL(request.url);
-    url.hostname = 'www.speedtest.net';
-    url.protocol = 'https:';
-    request = new Request(url, request);
-    return await fetch(request);
+    let nginxWelcomePage = `<!DOCTYPE html>
+        <html>
+        <head>
+        <title>Welcome to nginx!</title>
+        <style>
+        html { color-scheme: light dark; }
+        body { width: 35em; margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif; }
+        </style>
+        </head>
+        <body>
+        <h1>Welcome to nginx!</h1>
+        <p>If you see this page, the nginx web server is successfully installed and
+        working. Further configuration is required.</p>
+
+        <p>For online documentation and support please refer to
+        <a href="http://nginx.org/">nginx.org</a>.<br/>
+        Commercial support is available at
+        <a href="http://nginx.com/">nginx.com</a>.</p>
+
+        <p><em>Thank you for using nginx.</em></p>
+        </body>
+        </html>`
+    return new Response(nginxWelcomePage, {
+        status: 200,
+        headers:
+        {
+            'Content-Type': 'text/html',
+            'Server': 'nginx/1.20.2',
+            'Access-Control-Allow-Origin': url.origin,
+            'Access-Control-Allow-Methods': 'GET, POST',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
+            'Referrer-Policy': 'strict-origin-when-cross-origin',
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'CDN-Cache-Control': 'no-store'
+        }
+    });
 }
 
 export async function getMyIP(request) {
