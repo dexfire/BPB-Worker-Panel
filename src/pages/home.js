@@ -12,7 +12,7 @@ export async function renderHomePage (proxySettings, isPassSet) {
         customCdnSni,
         bestVTInterval,
         vConfigs,
-        trojanConfigs,
+        ttjConfigs,
         ports,
         lengthMin, 
         lengthMax, 
@@ -44,7 +44,7 @@ export async function renderHomePage (proxySettings, isPassSet) {
     } = proxySettings;
 
     const isWarpPlus = warpPlusLicense ? true : false;
-    const activeProtocols = (vConfigs ? 1 : 0) + (trojanConfigs ? 1 : 0);
+    const activeProtocols = (vConfigs ? 1 : 0) + (ttjConfigs ? 1 : 0);
     let httpPortsBlock = '', httpsPortsBlock = '';
     const allPorts = [...(globalThis.hostName.includes('workers.dev') ? globalThis.defaultHttpPorts : []), ...globalThis.defaultHttpsPorts];
 
@@ -464,8 +464,8 @@ export async function renderHomePage (proxySettings, isPassSet) {
                                 <label for="vConfigs" style="margin: 0 5px; font-weight: normal; font-size: unset;">VLESS</label>
                             </div>
                             <div style = "display: flex; justify-content: center; align-items: center;">
-                                <input type="checkbox" id="trojanConfigs" name="trojanConfigs" onchange="handleProtocolChange(event)" value="true" ${trojanConfigs ? 'checked' : ''}>
-                                <label for="trojanConfigs" style="margin: 0 5px; font-weight: normal; font-size: unset;">Trojan</label>
+                                <input type="checkbox" id="ttjConfigs" name="ttjConfigs" onchange="handleProtocolChange(event)" value="true" ${ttjConfigs ? 'checked' : ''}>
+                                <label for="ttjConfigs" style="margin: 0 5px; font-weight: normal; font-size: unset;">Trojan</label>
                             </div>
                         </div>
                     </div>

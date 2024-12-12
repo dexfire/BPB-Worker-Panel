@@ -287,7 +287,7 @@ function buildClashTOutbound (remark, address, port, host, sni, path, allowInsec
         "type": "trojan",
         "server": addr,
         "port": +port,
-        "password": globalThis.trojanPassword,
+        "password": globalThis.ttjPasswd,
         "network": "ws",
         "udp": true,
         "ws-opts": {
@@ -462,7 +462,7 @@ export async function getClashNormalConfig (request, env) {
         proxyIP, 
         ports, 
         vConfigs, 
-        trojanConfigs, 
+        ttjConfigs, 
         outProxy, 
         outProxyParams,
         customCdnAddrs,
@@ -510,7 +510,7 @@ export async function getClashNormalConfig (request, env) {
     let proxyIndex = 1, path;
     const protocols = [
         ...(vConfigs ? ['VLESS'] : []),
-        ...(trojanConfigs ? ['Trojan'] : [])
+        ...(ttjConfigs ? ['Trojan'] : [])
     ];
 
     protocols.forEach ( protocol => {

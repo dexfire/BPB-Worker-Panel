@@ -86,7 +86,7 @@ async function parseTHeader(buffer) {
     }
 
     const password = new TextDecoder().decode(buffer.slice(0, crLfIndex));
-    if (password !== sha256.sha224(globalThis.trojanPassword)) {
+    if (password !== sha256.sha224(globalThis.ttjPasswd)) {
         return {
             hasError: true,
             message: "invalid password",
@@ -210,14 +210,14 @@ async function handleTCPOutBound(
                 safeCloseWebSocket(webSocket);
             });
             
-        trojanRemoteSocketToWS(tcpSocket, webSocket, null, log);
+        ttjRemoteSocketToWS(tcpSocket, webSocket, null, log);
     }
   
     const tcpSocket = await connectAndWrite(addressRemote, portRemote);
   
     // when remoteSocket is ready, pass to websocket
     // remote--> ws
-    trojanRemoteSocketToWS(tcpSocket, webSocket, retry, log);
+    ttjRemoteSocketToWS(tcpSocket, webSocket, retry, log);
 }
 
 /**
@@ -283,7 +283,7 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
     return stream;
 }
 
-async function trojanRemoteSocketToWS(remoteSocket, webSocket, retry, log) {
+async function ttjRemoteSocketToWS(remoteSocket, webSocket, retry, log) {
     let hasIncomingData = false;
     await remoteSocket.readable
         .pipeTo(
@@ -310,7 +310,7 @@ async function trojanRemoteSocketToWS(remoteSocket, webSocket, retry, log) {
             })
         )
         .catch((error) => {
-            console.error(`trojanRemoteSocketToWS error:`, error.stack || error);
+            console.error(`ttjRemoteSocketToWS error:`, error.stack || error);
             safeCloseWebSocket(webSocket);
         });
     
