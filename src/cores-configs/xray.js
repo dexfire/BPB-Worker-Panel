@@ -729,7 +729,7 @@ export async function getXxrCustomConfigs(request, env, isFragment) {
         } catch (error) {
             console.log('An error occured while parsing chain proxy: ', error);
             chainProxy = undefined;
-            await env.bpb.put("proxySettings", JSON.stringify({
+            await env.cnc.put("proxySettings", JSON.stringify({
                 ...proxySettings, 
                 outProxy: '',
                 outProxyParams: {}
