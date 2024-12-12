@@ -337,7 +337,7 @@ function buildXxrTOutbound (tag, address, port, host, sni, proxyIP, isFragment, 
                 {
                     address: address,
                     port: +port,
-                    password: globalThis.trojanPassword,
+                    password: globalThis.ttjPasswd,
                     level: 8
                 }
             ]
@@ -718,7 +718,7 @@ export async function getXxrCustomConfigs(request, env, isFragment) {
         customCdnHost,
         customCdnSni,
         vConfigs,
-        trojanConfigs,
+        ttjConfigs,
         ports
     } = proxySettings;
 
@@ -742,7 +742,7 @@ export async function getXxrCustomConfigs(request, env, isFragment) {
     const totalAddresses = isFragment ? [...Addresses] : [...Addresses, ...customCdnAddresses];
     const totalPorts = ports.filter(port => isFragment ? globalThis.defaultHttpsPorts.includes(port): true);
     vConfigs && protocols.push('VLESS');
-    trojanConfigs && protocols.push('Trojan');
+    ttjConfigs && protocols.push('Trojan');
     let proxyIndex = 1;
     
     for (const protocol of protocols) {
