@@ -6,7 +6,7 @@ import { isValidUUID } from '../helpers/helpers';
  * @param {import("@cloudflare/workers-types").Request} request The incoming request object.
  * @returns {Promise<Response>} A Promise that resolves to a WebSocket response object.
  */
-export async function vlessOverWSHandler(request) {
+export async function vOverWSHandler(request) {
     /** @type {import("@cloudflare/workers-types").WebSocket[]} */
     // @ts-ignore
     const webSocketPair = new WebSocketPair();
@@ -51,9 +51,9 @@ export async function vlessOverWSHandler(request) {
                     portRemote = 443,
                     addressRemote = "",
                     rawDataIndex,
-                    vlessVersion = new Uint8Array([0, 0]),
+                    vVersion = new Uint8Array([0, 0]),
                     isUDP,
-                } = await processVlessHeader(chunk, globalThis.userID);
+                } = await processVHeader(chunk, globalThis.userID);
                 address = addressRemote;
                 portWithRandomLog = `${portRemote}--${Math.random()} ${isUDP ? "udp " : "tcp "} `;
                 if (hasError) {
@@ -73,7 +73,7 @@ export async function vlessOverWSHandler(request) {
                     }
                 }
                 // ["version", "附加信息长度 N"]
-                const vlessResponseHeader = new Uint8Array([vlessVersion[0], 0]);
+                const vlessResponseHeader = new Uint8Array([vVersion[0], 0]);
                 const rawClientData = chunk.slice(rawDataIndex);
 
                 // TODO: support udp here when cf runtime has udp support
@@ -185,14 +185,14 @@ async function handleTCPOutBound(
                 safeCloseWebSocket(webSocket);
             });
             
-        vlessRemoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, null, log);
+        vRemoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, null, log);
     }
   
     const tcpSocket = await connectAndWrite(addressRemote, portRemote);
   
     // when remoteSocket is ready, pass to websocket
     // remote--> ws
-    vlessRemoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, retry, log);
+    vRemoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, retry, log);
 }
 
 /**
@@ -272,11 +272,11 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
  *  addressType?: number,
  *  portRemote?: number,
  *  rawDataIndex?: number,
- *  vlessVersion?: Uint8Array,
+ *  vVersion?: Uint8Array,
  *  isUDP?: boolean
  * }} An object with the relevant information extracted from the VLESS header buffer.
  */
-async function processVlessHeader(vlessBuffer, userID) {
+async function processVHeader(vlessBuffer, userID) {
     if (vlessBuffer.byteLength < 24) {
         return {
             hasError: true,
@@ -375,7 +375,7 @@ async function processVlessHeader(vlessBuffer, userID) {
         addressType,
         portRemote,
         rawDataIndex: addressValueIndex + addressLength,
-        vlessVersion: version,
+        vVersion: version,
         isUDP,
     };
 }
@@ -389,7 +389,7 @@ async function processVlessHeader(vlessBuffer, userID) {
  * @param {(info: string) => void} log The logging function.
  * @returns {Promise<void>} A Promise that resolves when the conversion is complete.
  */
-async function vlessRemoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, retry, log) {
+async function vRemoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, retry, log) {
     // remote--> ws
     let remoteChunkCount = 0;
     let chunks = [];
@@ -433,7 +433,7 @@ async function vlessRemoteSocketToWS(remoteSocket, webSocket, vlessResponseHeade
             })
         )
         .catch((error) => {
-            console.error(`vlessRemoteSocketToWS has exception `, error.stack || error);
+            console.error(`vRemoteSocketToWS has exception `, error.stack || error);
             safeCloseWebSocket(webSocket);
         });
   
@@ -529,7 +529,7 @@ function stringify(arr, offset = 0) {
  * @returns {{write: (chunk: Uint8Array) => void}} An object with a write method that accepts a Uint8Array chunk to write to the transform stream.
  */
 async function handleUDPOutBound(webSocket, vlessResponseHeader, log) {
-    let isVlessHeaderSent = false;
+    let isVHSent = false;
     const transformStream = new TransformStream({
         start(controller) {},
         transform(chunk, controller) {
@@ -567,11 +567,11 @@ async function handleUDPOutBound(webSocket, vlessResponseHeader, log) {
                 const udpSizeBuffer = new Uint8Array([(udpSize >> 8) & 0xff, udpSize & 0xff]);
                 if (webSocket.readyState === WS_READY_STATE_OPEN) {
                     log(`doh success and dns message length is ${udpSize}`);
-                    if (isVlessHeaderSent) {
+                    if (isVHSent) {
                         webSocket.send(await new Blob([udpSizeBuffer, dnsQueryResult]).arrayBuffer());
                     } else {
                         webSocket.send(await new Blob([vlessResponseHeader, udpSizeBuffer, dnsQueryResult]).arrayBuffer());
-                        isVlessHeaderSent = true;
+                        isVHSent = true;
                     }
                 }
             },

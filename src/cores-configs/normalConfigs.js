@@ -7,7 +7,7 @@ export async function getNormalConfigs(request, env) {
         cleanIPs, 
         proxyIP, 
         ports, 
-        vlessConfigs, 
+        vConfigs, 
         trojanConfigs , 
         outProxy, 
         customCdnAddrs, 
@@ -40,7 +40,7 @@ export async function getNormalConfigs(request, env) {
                 ? `&security=tls&sni=${sni}&fp=randomized&alpn=${alpn}`
                 : '&security=none';
 
-            if (vlessConfigs) {
+            if (vConfigs) {
                 vlessConfs += `${atob('dmxlc3M6Ly8=')}${globalThis.userID}@${addr}:${port}?path=/${path}&encryption=none&host=${host}&type=ws${tlsFields}#${vlessRemark}\n`; 
             }
 
