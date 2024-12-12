@@ -2,7 +2,7 @@ export async function renderHomePage (proxySettings, isPassSet) {
     const {
         remoteDNS, 
         localDNS,
-        vlessTrojanFakeDNS, 
+        vltFakeDNS, 
         proxyIP, 
         outProxy,
         cleanIPs, 
@@ -10,8 +10,8 @@ export async function renderHomePage (proxySettings, isPassSet) {
         customCdnAddrs,
         customCdnHost,
         customCdnSni,
-        bestVLESSTrojanInterval,
-        vlessConfigs,
+        bestVTInterval,
+        vConfigs,
         trojanConfigs,
         ports,
         lengthMin, 
@@ -44,7 +44,7 @@ export async function renderHomePage (proxySettings, isPassSet) {
     } = proxySettings;
 
     const isWarpPlus = warpPlusLicense ? true : false;
-    const activeProtocols = (vlessConfigs ? 1 : 0) + (trojanConfigs ? 1 : 0);
+    const activeProtocols = (vConfigs ? 1 : 0) + (trojanConfigs ? 1 : 0);
     let httpPortsBlock = '', httpsPortsBlock = '';
     const allPorts = [...(globalThis.hostName.includes('workers.dev') ? globalThis.defaultHttpPorts : []), ...globalThis.defaultHttpsPorts];
 
@@ -402,11 +402,11 @@ export async function renderHomePage (proxySettings, isPassSet) {
                             title="Please enter a valid DNS IP Address!"  required>
                     </div>
                     <div class="form-control">
-                        <label for="vlessTrojanFakeDNS">🧢 Fake DNS</label>
+                        <label for="vltFakeDNS">🧢 Fake DNS</label>
                         <div class="input-with-select">
-                            <select id="vlessTrojanFakeDNS" name="vlessTrojanFakeDNS">
-                                <option value="true" ${vlessTrojanFakeDNS ? 'selected' : ''}>Enabled</option>
-                                <option value="false" ${!vlessTrojanFakeDNS ? 'selected' : ''}>Disabled</option>
+                            <select id="vltFakeDNS" name="vltFakeDNS">
+                                <option value="true" ${vltFakeDNS ? 'selected' : ''}>Enabled</option>
+                                <option value="false" ${!vltFakeDNS ? 'selected' : ''}>Disabled</option>
                             </select>
                         </div>
                     </div>
@@ -453,15 +453,15 @@ export async function renderHomePage (proxySettings, isPassSet) {
                         <input type="text" id="customCdnSni" name="customCdnSni" value="${customCdnSni}">
                     </div>
                     <div class="form-control">
-                        <label for="bestVLESSTrojanInterval">🔄 Best Interval</label>
-                        <input type="number" id="bestVLESSTrojanInterval" name="bestVLESSTrojanInterval" min="10" max="90" value="${bestVLESSTrojanInterval}">
+                        <label for="bestVTInterval">🔄 Best Interval</label>
+                        <input type="number" id="bestVTInterval" name="bestVTInterval" min="10" max="90" value="${bestVTInterval}">
                     </div>
                     <div class="form-control" style="padding-top: 10px;">
-                        <label for="vlessConfigs">⚙️ Protocols</label>
+                        <label for="vConfigs">⚙️ Protocols</label>
                         <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; align-items: baseline; margin-top: 10px;">
                             <div style = "display: flex; justify-content: center; align-items: center;">
-                                <input type="checkbox" id="vlessConfigs" name="vlessConfigs" onchange="handleProtocolChange(event)" value="true" ${vlessConfigs ? 'checked' : ''}>
-                                <label for="vlessConfigs" style="margin: 0 5px; font-weight: normal; font-size: unset;">VLESS</label>
+                                <input type="checkbox" id="vConfigs" name="vConfigs" onchange="handleProtocolChange(event)" value="true" ${vConfigs ? 'checked' : ''}>
+                                <label for="vConfigs" style="margin: 0 5px; font-weight: normal; font-size: unset;">VLESS</label>
                             </div>
                             <div style = "display: flex; justify-content: center; align-items: center;">
                                 <input type="checkbox" id="trojanConfigs" name="trojanConfigs" onchange="handleProtocolChange(event)" value="true" ${trojanConfigs ? 'checked' : ''}>

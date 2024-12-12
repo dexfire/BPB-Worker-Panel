@@ -1,7 +1,7 @@
 import { connect } from 'cloudflare:sockets';
 import sha256 from 'js-sha256';
 
-export async function trojanOverWSHandler(request) {
+export async function trOverWSHandler(request) {
     const webSocketPair = new WebSocketPair();
     const [client, webSocket] = Object.values(webSocketPair);
     webSocket.accept();
@@ -38,7 +38,7 @@ export async function trojanOverWSHandler(request) {
                         portRemote = 443,
                         addressRemote = "",
                         rawClientData,
-                    } = await parseTrojanHeader(chunk);
+                    } = await parseTHeader(chunk);
 
                     address = addressRemote;
                     portWithRandomLog = `${portRemote}--${Math.random()} tcp`;
@@ -69,7 +69,7 @@ export async function trojanOverWSHandler(request) {
     });
 }
 
-async function parseTrojanHeader(buffer) {
+async function parseTHeader(buffer) {
     if (buffer.byteLength < 56) {
         return {
             hasError: true,
